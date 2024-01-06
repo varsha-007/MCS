@@ -7,22 +7,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | MCS</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <style>
+        .messages {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+
+        }
+
+        .alertMessage {
+            background-color: #f44336;
+            color: white;
+            font-size: 20px;
+        }
+
+        .close {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: black;
+        }
+    </style>
 </head>
 
 <body>
 
 
 
+
+
+
+
+
+    {% if messages %}
+    <div class="alertMessage">
+        <div class="messages">
+            {% for message in messages %}
+            <span class="close" onclick="this.parentElement.style.display='none';">×</span>
+            <strong {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</strong>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% endif %}
+
+
+
+
+
     <nav>
         <div class="container">
             <div class="nav-links">
-                <a href="" class="logo">
+                <a href="/" class="logo">
                     <img src="{% static 'images/logo.png' %}" alt="">
                 </a>
                 <div class="links">
-                    <a href="" class="active">Home</a>
-                    <a href="">Pricing</a>
-                    <a href="">Contact Us</a>
+                    <a href="/" class="active">Home</a>
+                    <a href="/">Pricing</a>
+                    <a href="/">Contact Us</a>
+                    {% if user.is_superuser %}
+                    <a id="downloadPdf">Download PDF</a>
+                    <a href="{% url 'clean-data' %}">Clear Data</a>
+                    <a href="{% url 'admin:index' %}">Admin</a>
+
+                    {% endif%}
+                    <a href="{% url 'logout' %}">Log Out</a>
+
                 </div>
             </div>
         </div>
@@ -52,53 +112,29 @@
                             </tr>
                         </thead>
                         <tbody class="col-1-fill">
+                            {% for item in forward_physical_values %}
                             <tr>
-                                <td>PBF</td>
-                                <td>$0.55</td>
-                                <td>$0.85</td>
-                                <td>$0.80</td>
-                                <td>$0.65</td>
+                                <td>{{item.prod}}</td>
+                                <td>{{item.mar}}</td>
+                                <td>{{item.apr}}</td>
+                                <td>{{item.may}}</td>
+                                <td>{{item.q3}}</td>
                             </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$0.55</td>
-                                <td>$0.85</td>
-                                <td>$0.80</td>
-                                <td>$0.65</td>
-
-                            </tr>
-                            <tr>
-                                <td>PBL</td>
-                                <td>$0.55</td>
-                                <td>$0.85</td>
-                                <td>$0.80</td>
-                                <td>$0.65</td>
-
-                            </tr>
-                            <tr>
-                                <td>NBL</td>
-                                <td>$0.55</td>
-                                <td>$0.85</td>
-                                <td>$0.80</td>
-                                <td>$0.65</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                         </tr>
                     </table>
 
+                    {% if forward_physical_text_card %}
                     <div class="blue-card">
-                        <p> Previous days Seaborne Deals in the Market: Primary: 193,457kt IOC6, 7th Feb BL, Mar -$2.25
-                            Secondary: <br>
-                            170kt PBF, mid Mar, Mar +$0.40 190kt IOC6, Feb Arr, Sold
-                            <br>
-                            <br>
-                            80kt NBL, 3.6-15, Mar 0.1150 <br>
-                            Parcel PBF, Feb/Mar, Mar +$0.20 65kt Karara, early Feb, Withdrawn<br><br>
-
-                            80kt NBL, mid Feb, Landing 200kt Jingbao F, 1H Feb, Mar -$8.20
+                        {% for item in forward_physical_text_card %}
+                        <p>
+                            {{item.text}}
                             <br>
                         </p>
+                        {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
                 <div>
                     <ul>Seaborne Last Traded levels</ul>
@@ -111,60 +147,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in seaborne_last_traded_levels %}
                             <tr>
-                                <td>PBF</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-
+                                <td>{{item.product}}</td>
+                                <td>{{item.primary}}</td>
+                                <td>{{item.secondary}}</td>
                             </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
-                            <tr>
-                                <td>PBF</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-
-                            </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
-                            <tr>
-                                <td>PBF</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-
-                            </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
-                            <tr>
-                                <td>PBF</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-
-                            </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
-                            <tr>
-                                <td>IOCJ</td>
-                                <td>$126.00 (+$2.25)</td>
-                                <td>$124.00 (-$0.45)</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                         </tr>
                     </table>
@@ -192,83 +181,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for item in prem_or_disc_table %}
                     <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
+                        <td>{{item.prem_disc}}</td>
+                        <td>{{item.product}}</td>
+                        <td>{{item.phys_in_rmb}}</td>
+                        <td>{{item.rz_value}}</td>
+                        <td>{{item.diff1}}</td>
+                        <td>{{item.diff1_usd}}</td>
+                        <td>{{item.cfd_value}}</td>
+                        <td>{{item.diff2}}</td>
+                        <td>{{item.diff2_usd}}</td>
                     </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
-                    <tr>
-                        <td>$0.55</td>
-                        <td>PBF</td>
-                        <td>¥921.06</td>
-                        <td>¥895.00</td>
-                        <td>¥26.06</td>
-                        <td>$3.79</td>
-                        <td>¥909.00</td>
-                        <td>¥12.06</td>
-                        <td>$1.76</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
                 </tr>
             </table>
@@ -289,60 +214,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in proxy_blend_table %}
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td>¥888.50</td>
-                                <td>¥895.00</td>
-                                <td>¥918.00</td>
+                                <td>{{item.proxy_blend}}</td>
+                                <td>{{item.iocj_ssf_vs_pbf}}</td>
+                                <td>{{item.rz}}</td>
+                                <td>{{item.cfd}}</td>
+                                <td>{{item.jyn}}</td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-
-                            </tr>
-                            <tr>
-                                <td><span>Portside <br> Spreads</span></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>RMB Diff</td>
-                                <td>-¥6.50</td>
-                                <td>-¥14.00</td>
-                                <td>-¥13.00</td>
-
-                            </tr>
+                            {% endfor %}
                         </tbody>
                         </tr>
                     </table>
@@ -356,20 +236,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in other_product_values_table %}
                             <tr>
-                                <td>Indian Fines 57%</td>
-                                <td>-21.50%</td>
-
+                                <td>{{item.other_product_values}}</td>
+                                <td>{{item.period_mar}}</td>
                             </tr>
-                            <tr>
-                                <td>Indian Pellet 63%</td>
-                                <td>$8.00</td>
-
-                            </tr>
-                            <tr>
-                                <td>IOC6</td>
-                                <td>-$2.00</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                     <br>
@@ -382,16 +254,112 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in primaryvs_secondary_differential_table %}
                             <tr>
-                                <td>PBF</td>
-                                <td>$1.40</td>
-
+                                <td>{{item.primary_vs_secondary_differential}}</td>
+                                <td>{{item.apr}}</td>
                             </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="onshore-values">
+        <div class="container">
+            <br>
+            <br>
+            <h2>Onshore values to USD</h2>
+            <br>
+            <div class="row2-col2  _60per">
+                <div>
+                    <table>
+                        <thead>
                             <tr>
-                                <td>IOCJ</td>
-                                <td>$0.00</td>
-
+                                <th></th>
+                                <th>Rizhao RMB</th>
+                                <th>USD Equiv</th>
+                                <th>Caofeidien</th>
+                                <th>USD Equiv</th>
+                                <th>Jiangyin</th>
+                                <th>USD Equiv</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in onshore_values %}
+                            <tr>
+                                <td>{{item.column1}}</td>
+                                <td>{{item.Rizhao_rmb}}</td>
+                                <td>{{item.usd_equiv1}}</td>
+                                <td>{{item.caofeidien}}</td>
+                                <td>{{item.usd_equiv2}}</td>
+                                <td>{{item.jiangyin}}</td>
+                                <td>{{item.usd_equiv3}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Mysteel 62% Index</th>
+                                <th>(Previous day)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in mysteel_table %}
+                            <tr>
+                                <td>{{item.mysteel_index}}</td>
+                                <td>{{item.previous_day}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Futures Price | 11.30am</th>
+                                <th>(Singapore time)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in futures_table %}
+                            <tr>
+                                <td>{{item.futures_price}}</td>
+                                <td>{{item.time}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                            {% for item in futures_sub_table %}
+                            <tr>
+                                <td>{{item.exch_rate}}</td>
+                                <td>{{item.value}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Secondary Offer Depth</th>
+                                <th>(mt)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in secondary_offer %}
+                            <tr>
+                                <td>{{item.secondary_offer}}</td>
+                                <td>{{item.depth_mt}}</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -400,6 +368,92 @@
     </section>
 
 
+
+
+
+
+
+    <section class="portside">
+        <div class="container">
+            <br>
+            <br>
+            <h2>Portside Iron Ore Transaction Report | Feb 17th 2023</h2>
+            <br>
+            <div class="row2-col2  _60per">
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+
+                                <th>No</th>
+                                <th>PORT</th>
+                                <th> Product</th>
+                                <th>T/P</th>
+                                <th>T/P on 16th</th>
+                                <th>Contents</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in port_side_iron %}
+                            <tr>
+                                <td>{{item.no}}</td>
+                                <td>{{item.port}}</td>
+                                <td>{{item.product}}</td>
+                                <td>{{item.t_p}}</td>
+                                <td>{{item.t_p_on_16th}}</td>
+                                <td>{{item.contents}}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="row2-col2 g100">
+                <div>
+                    {% if port_side_iron_text_card1 %}
+                    <div class="blue-card">
+                        {% for item in port_side_iron_text_card1 %}
+                        <p>
+                            {{item.text}}
+                            <br>
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if port_side_iron_text_card2 %}
+                    <div class="blue-card">
+                        {% for item in port_side_iron_text_card2 %}
+                        <p>
+                            {{item.text}}
+                            <br>
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('downloadPdf').addEventListener('click', function () {
+            // Target your HTML content
+            const element = document.body;
+
+            // Use html2pdf library to generate PDF
+            html2pdf(element);
+        });
+    </script>
 </body>
 
 </html>

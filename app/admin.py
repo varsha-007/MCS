@@ -1,17 +1,32 @@
 from django.contrib import admin
+from django.db import models
 
 from .models import *
 
-# Register your models here.
+
+def register_models(*models_to_register):
+    for model in models_to_register:
+        fields = [
+            field.name
+            for field in model._meta.get_fields()
+            if isinstance(field, models.Field) and field.name != "id"
+        ]
+        admin.site.register(model, list_display=fields)
 
 
-class ForwardPhysicalValuesAdmin(admin.ModelAdmin):
-    list_display = ("prod", "mar", "apr", "may", "q3")
-
-
-class SeaborneLastTradedLevelsAdmin(admin.ModelAdmin):
-    list_display = ("product", "primary", "secondary")
-
-
-admin.site.register(ForwardPhysicalValues, ForwardPhysicalValuesAdmin)
-admin.site.register(SeaborneLastTradedLevels, SeaborneLastTradedLevelsAdmin)
+# Register your models using the function
+register_models(
+    ForwardPhysicalTextCard,
+    PremOrDiscTable,
+    ProxyBlendTable,
+    OtherProductValuesTable,
+    PrimaryvsSecondaryDifferentialTable,
+    OnshoreValues,
+    MysteelTable,
+    FuturesTable,
+    FuturesSubTable,
+    SecondaryOffer,
+    PortSideIron,
+    PortSideIronTextCard1,
+    PortSideIronTextCard2,
+)

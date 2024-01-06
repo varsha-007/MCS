@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Hacker Login Form</title>
+  <link rel="stylesheet" href="../../static/css/style.css">
+
+  <style>
+    .messages {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+
+    }
+
+    .alertMessage {
+      background-color: #f44336;
+      color: white;
+      font-size: 20px;
+    }
+
+    .close {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close:hover {
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+  {% if messages %}
+  <div class="alertMessage">
+    <div class="messages">
+      {% for message in messages %}
+      <span class="close" onclick="this.parentElement.style.display='none';">×</span>
+      <strong {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</strong>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endif %}
+
+  <section>
+    <div class="signin">
+
+      <div class="content">
+
+        <h2>Sign In</h2>
+
+        <form class="form" method="POST">
+          {% csrf_token %}
+          <div class="inputBox">
+
+            <input type="text" name="username" required> <i>Username</i>
+
+          </div>
+
+          <div class="inputBox">
+
+            <input type="password" name="password" required> <i>Password</i>
+
+          </div>
+
+          <div class="links"> <a>Don't have account?</a> <a href="{% url 'sign-up' %}">Signup</a>
+
+          </div>
+
+          <div class="inputBox">
+
+            <input type="submit" value="Login">
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </section> <!-- partial -->
+
+</body>
+
+</html>
